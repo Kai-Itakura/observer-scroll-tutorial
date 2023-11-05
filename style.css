@@ -6,15 +6,14 @@
   font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
   color: white;
+  list-style: none;
+  text-decoration: none;
 }
 
 body {
   height: 100%;
   width: 100%;
-  background-image: url(./images/main.jpg);
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-color: aliceblue;
 }
 
 body::after {
@@ -95,4 +94,209 @@ h2 {
 h2.active {
   opacity: 1;
   transition: opacity 3s;
+}
+
+/* ヘッダー */
+.header {
+  background-color: chocolate;
+  position: fixed;
+  z-index: 200;
+  width: 100%;
+}
+
+.link-container {
+  position: relative;
+}
+
+.hamburger {
+  display: none;
+}
+
+.header-inner {
+  display: flex;
+  gap: 84px;
+  list-style: none;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.link-item-container {
+  height: 100%;
+}
+
+.link {
+  text-decoration: none;
+  padding: 20px;
+  display: block;
+}
+
+.link:hover {
+  cursor: pointer;
+  color: chartreuse;
+}
+
+.accordion-container-inner {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  overflow: hidden;
+  width: 100%;
+  height: 0;
+  transition: all 0.5s;
+}
+
+.accordion-container {
+  position: relative;
+  background: url('./images/4.jpg') center;
+  width: 100%;
+  padding: 48px;
+  z-index: 1;
+}
+
+.accordion-container-inner.is-open {
+  height: auto;
+}
+
+.accordion-container:before {
+  content: '';
+  background: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: grayscale(1);
+  z-index: -1;
+}
+
+.button-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.button {
+  padding: 10px;
+  background-color: rgb(66, 90, 91);
+  color: aliceblue;
+  transition: all 0.2s;
+}
+
+.button.selected {
+  background-color: cadetblue;
+}
+
+.sub-category-container {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  display: grid;
+}
+
+.sub-category-container.js-shop-links {
+  visibility: hidden;
+  opacity: 0.5;
+  transition: opacity 0.5s;
+  height: 0;
+}
+
+.sub-category-container.active {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+}
+
+.sub-category-container li {
+  padding: 10px;
+  background-color: burlywood;
+  color: black;
+}
+
+.brand-link-container {
+  display: grid;
+}
+
+@media screen and (max-width: 768px) {
+  .link-container {
+    height: 100%;
+    background-color: chocolate;
+  }
+
+  .sp-header-inner {
+    height: 80px;
+    width: 100%;
+    box-shadow: #00000029 0px 3px 6px;
+  }
+
+  .hamburger {
+    display: block;
+    height: 48px;
+    width: 24px;
+    position: absolute;
+    top: 21px;
+    left: 28px;
+  }
+
+  .hamburger span {
+    position: absolute;
+    border-radius: 100vh;
+    width: 24px;
+    height: 2px;
+    background-color: #fff;
+    transition: all 0.5s;
+  }
+
+  .hamburger span:nth-child(2) {
+    left: 0;
+    top: 9px;
+  }
+
+  .hamburger span:nth-child(3) {
+    left: 0;
+    top: 18px;
+  }
+
+  .hamburger.active span:first-child {
+    transform: rotate(45deg);
+    top: 9px;
+  }
+
+  .hamburger.active span:nth-child(2) {
+    display: none;
+  }
+
+  .hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    top: 9px;
+  }
+
+  .hamburger-text {
+    font-size: 10px;
+    line-height: 1;
+    white-space: nowrap;
+    position: absolute;
+    top: 27px;
+    left: -6px;
+  }
+
+  .header-inner {
+    display: block;
+    margin: 0 auto;
+    padding: 0 24px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    position: absolute;
+    background-color: chocolate;
+    z-index: -1;
+  }
+
+  .header-inner.active {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .accordion-container-inner {
+    position: static;
+  }
 }
