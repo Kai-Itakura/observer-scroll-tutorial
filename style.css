@@ -16,6 +16,10 @@ body {
   background-color: aliceblue;
 }
 
+body.active {
+  overflow-y: hidden;
+}
+
 body::after {
   content: '';
   position: absolute;
@@ -289,6 +293,8 @@ h2.active {
     position: absolute;
     background-color: chocolate;
     z-index: -1;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
 
   .header-inner.active {
@@ -298,5 +304,14 @@ h2.active {
 
   .accordion-container-inner {
     position: static;
+  }
+
+  .link-item-container.active .link {
+    color: blueviolet;
+  }
+
+  .sub-category-container {
+    display: flex;
+    flex-wrap: wrap;
   }
 }

@@ -34,34 +34,72 @@ titles.map((title, index) => {
 })
 
 /**
- * メディアクエリ
+ * マウスオーバーした時の処理
  */
-const initMediaQuery = function () {
-  const mediaQuery = window.matchMedia('(max-width: 768px)')
+const handleMouseover = (e) => {
+  // アコーディオンのラッパーを取得
+  const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
 
-  const handleWindowResize = (e) => {
-    if (e.matches) {
-      initSpHeaderAccordion()
-    } else {
-      initHeaderAccordion()
-    }
-  }
+  // 表示するアコーディオン要素の高さを取得
+  const accHeight = accWrapper.children[0].offsetHeight
 
-  handleWindowResize(mediaQuery)
-
-  mediaQuery.addEventListener('change', handleWindowResize)
+  // アコーディオンのラッパー（高さ0px）に内側に要素の高さを設定
+  accWrapper.style.height = `${accHeight}px`
+  accWrapper.classList.add('active')
 }
-initMediaQuery()
+
+/**
+ * マウスアウトした時の処理
+ */
+const handleMouseout = function (e) {
+  // アコーディオンのラッパーを取得
+  const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
+
+  accWrapper.style.height = '0px'
+  accWrapper.classList.remove('.active')
+  e.currentTarget.classList.remove('active')
+}
 
 /**
  * ヘッダーメニューのアコーディオンPC
  */
-const initHeaderAccordion = function () {
+function initHeaderAccordion(bool) {
   // ホバーターゲット取得
   const hoverTargets = document.querySelectorAll('.link-item-container')
 
-  // マウスオーバーした時の処理
-  handleMouseover = (e) => {
+  hoverTargets.forEach((hoverTarget) => {
+    if (bool) {
+      console.log('PCのアコーディオン追加')
+      // ターゲット要素のマウスオーバーを監視
+      hoverTarget.addEventListener('mouseenter', handleMouseover)
+      // ターゲット要素からのマウスアウトを監視
+      hoverTarget.addEventListener('mouseleave', handleMouseout)
+    } else {
+      console.log('PCのアコーディオン削除')
+      hoverTarget.removeEventListener('mouseenter', handleMouseover)
+      hoverTarget.removeEventListener('mouseleave', handleMouseout)
+    }
+  })
+}
+
+/**
+ * クリックした時の処理
+ */
+const handleClick = function (e) {
+  e.preventDefault()
+
+  const target = e.currentTarget
+
+  if (target.classList.contains('active')) {
+    target.classList.remove('active')
+
+    // アコーディオンのラッパーを取得
+    const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
+
+    accWrapper.style.height = '0px'
+  } else {
+    target.classList.add('active')
+
     // アコーディオンのラッパーを取得
     const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
 
@@ -71,63 +109,48 @@ const initHeaderAccordion = function () {
     // アコーディオンのラッパー（高さ0px）に内側に要素の高さを設定
     accWrapper.style.height = `${accHeight}px`
   }
-
-  // マウスアウトした時の処理
-  handleMouseout = (e) => {
-    // アコーディオンのラッパーを取得
-    const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
-
-    accWrapper.style.height = '0px'
-  }
-
-  hoverTargets.forEach((hoverTarget) => {
-    // ターゲット要素のマウスオーバーを監視
-    hoverTarget.addEventListener('mouseenter', handleMouseover)
-    // ターゲット要素からのマウスアウトを監視
-    hoverTarget.addEventListener('mouseleave', handleMouseout)
-  })
 }
 
 /**
  * ヘッダーメニューのアコーディオンSP
  */
-function initSpHeaderAccordion() {
+function initSpHeaderAccordion(bool) {
   // クリックターゲット取得
   const hoverTargets = document.querySelectorAll('.link-item-container')
 
-  // クリックした時の処理
-  const handleClick = (e) => {
-    e.preventDefault()
-
-    const target = e.currentTarget
-
-    if (target.classList.contains('active')) {
-      target.classList.remove('active')
-
-      // アコーディオンのラッパーを取得
-      const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
-
-      accWrapper.style.height = '0px'
+  hoverTargets.forEach((hoverTarget) => {
+    if (bool) {
+      console.log('スマホのアコーディオン追加')
+      // ターゲット要素のクリックを監視
+      hoverTarget.addEventListener('click', handleClick)
     } else {
-      target.classList.add('active')
+      console.log('スマホのアコーディオン削除')
+      hoverTarget.removeEventListener('click', handleClick)
+    }
+  })
+}
 
-      // アコーディオンのラッパーを取得
-      const accWrapper = e.currentTarget.querySelector('.accordion-container-inner')
+/**
+ * メディアクエリ
+ */
+const initMediaQuery = function () {
+  const mediaQuery = window.matchMedia('(max-width: 768px)')
 
-      // 表示するアコーディオン要素の高さを取得
-      const accHeight = accWrapper.children[0].offsetHeight
-
-      // アコーディオンのラッパー（高さ0px）に内側に要素の高さを設定
-      accWrapper.style.height = `${accHeight}px`
+  const handleWindowResize = (e) => {
+    if (e.matches) {
+      initSpHeaderAccordion(true)
+      initHeaderAccordion(false)
+    } else {
+      initHeaderAccordion(true)
+      initSpHeaderAccordion(false)
     }
   }
 
-  hoverTargets.forEach((hoverTarget) => {
-    // ターゲット要素のクリックを監視
-    hoverTarget.addEventListener('click', handleClick)
-    console.log('クリック')
-  })
+  handleWindowResize(mediaQuery)
+
+  mediaQuery.addEventListener('change', handleWindowResize)
 }
+initMediaQuery()
 
 /**
  * ヘッダーのサブカテゴリ表示ボタン
@@ -170,6 +193,23 @@ const initCategoryButton = function () {
   })
 }
 initCategoryButton()
+
+/**
+ * Windowのresizeを監視
+ */
+const listenWindowResize = function () {
+  const targets = document.querySelectorAll('.link-item-container')
+
+  const handleResize = () => {
+    targets.forEach((target) => {
+      target.querySelector('.accordion-container-inner').style.height = '0px'
+      target.classList.remove('active')
+    })
+  }
+
+  window.addEventListener('resize', handleResize)
+}
+listenWindowResize()
 
 /**
  * ハンバーガーメニューのクリック
